@@ -30,11 +30,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($result->num_rows > 0) {
             $error = 'Ky email është i regjistruar më parë!';
         } else {
-            // Regjistroni përdoruesin
-            $hashed_password = hashPassword($password);
+            // Regjistroni përdoruesin (pa enkriptim)
             $sql = "INSERT INTO perdoruesit (emri, emaili, fjalekalimi) VALUES (?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sss", $name, $email, $hashed_password);
+            $stmt->bind_param("sss", $name, $email, $password);
             
             if ($stmt->execute()) {
                 $success = 'Regjistrimi u krye me sukses! Mund të hyni tani.';

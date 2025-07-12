@@ -5,8 +5,8 @@ require_once 'includes/functions.php';
 
 // Merrni produktet nga databaza
 $sql = "SELECT p.*, k.emri as kategoria FROM produktet p 
-        LEFT JOIN kategorite k ON p.id_kategoria = k.id_kategoria 
-        ORDER BY p.id_produkti DESC LIMIT 12";
+        LEFT JOIN kategorite k ON p.Id_kategoria = k.Id_kategoria 
+        ORDER BY p.Id_produkti DESC LIMIT 8";
 $result = $conn->query($sql);
 
 // Debug - për të parë nëse ka gabime

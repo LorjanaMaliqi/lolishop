@@ -4,11 +4,11 @@ require_once 'config/database.php';
 require_once 'includes/functions.php';
 
 // Get all categories with product count
-$sql = "SELECT k.*, COUNT(p.id_produkti) as total_produktet 
+$sql = "SELECT k.*, COUNT(p.Id_produkti) as total_produktet 
         FROM kategorite k 
-        LEFT JOIN produktet p ON k.id_kategoria = p.id_kategoria 
-        GROUP BY k.id_kategoria 
-        ORDER BY k.emri ASC";
+        LEFT JOIN produktet p ON k.Id_kategoria = p.Id_kategoria 
+        GROUP BY k.Id_kategoria 
+        ORDER BY k.emri";
 $result = $conn->query($sql);
 
 $kategorite = [];
@@ -22,17 +22,17 @@ if ($result) {
 $featured_products = [];
 foreach ($kategorite as $kategoria) {
     $featured_sql = "SELECT * FROM produktet 
-                     WHERE id_kategoria = ? 
-                     ORDER BY id_produkti DESC 
+                     WHERE Id_kategoria = ? 
+                     ORDER BY Id_produkti DESC 
                      LIMIT 3";
     $stmt = $conn->prepare($featured_sql);
-    $stmt->bind_param("i", $kategoria['id_kategoria']);
+    $stmt->bind_param("i", $kategoria['Id_kategoria']);
     $stmt->execute();
     $featured_result = $stmt->get_result();
     
-    $featured_products[$kategoria['id_kategoria']] = [];
+    $featured_products[$kategoria['Id_kategoria']] = [];
     while ($product = $featured_result->fetch_assoc()) {
-        $featured_products[$kategoria['id_kategoria']][] = $product;
+        $featured_products[$kategoria['Id_kategoria']][] = $product;
     }
 }
 ?>
@@ -92,7 +92,7 @@ foreach ($kategorite as $kategoria) {
                                         <div class="featured-products" style="margin-bottom: 1.5rem;">
                                             <h4 style="color: #4d4b49; margin-bottom: 1rem; font-size: 1.1rem; font-weight: 600;">Produktet e Fundit:</h4>
                                             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
-                                                <?php foreach ($featured_products[$kategoria['id_kategoria']] as $product): ?>
+                                                <?php foreach ($featured_products[$kategoria['Id_kategoria']] as $product): ?>
                                                     <div style="background: #f8f9fa; border-radius: 8px; padding: 0.8rem; text-align: center; border: 2px solid transparent; transition: all 0.3s ease;">
                                                         <div style="background: linear-gradient(135deg, #c7a76f 0%, #4d4b49 100%); height: 60px; border-radius: 6px; display: flex; align-items: center; justify-content: center; margin-bottom: 0.5rem; color: white;">
                                                             <i class="fas fa-box" style="font-size: 1.2rem;"></i>

@@ -54,7 +54,7 @@ switch ($sort) {
 
 // Get total count for pagination
 $count_sql = "SELECT COUNT(*) as total FROM produktet p 
-              LEFT JOIN kategorite k ON p.id_kategoria = k.id_kategoria 
+              LEFT JOIN kategorite k ON p.Id_kategoria = k.Id_kategoria 
               $where_clause";
 if (!empty($params)) {
     $count_stmt = $conn->prepare($count_sql);
@@ -69,7 +69,7 @@ $total_pages = ceil($total_products / $per_page);
 
 // Get products with pagination
 $sql = "SELECT p.*, k.emri as kategoria FROM produktet p 
-        LEFT JOIN kategorite k ON p.id_kategoria = k.id_kategoria 
+        LEFT JOIN kategorite k ON p.Id_kategoria = k.Id_kategoria 
         $where_clause $order_by LIMIT $per_page OFFSET $offset";
 
 if (!empty($params)) {

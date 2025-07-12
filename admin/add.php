@@ -72,13 +72,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $columns_result = $conn->query($check_produktet);
             
             $has_kategoria_id = false;
+            $kategoria_column = '';
             $has_sasia = false;
             $has_data_krijimit = false;
             
             if ($columns_result) {
                 while ($column = $columns_result->fetch_assoc()) {
                     $field = strtolower($column['Field']);
-                    if ($field === 'kategoria_id') $has_kategoria_id = true;
+                    // Check for kategoria columns - now it should be Id_kategoria
+                    if (in_array($field, ['kategoria_id', 'id_kategoria'])) {
+                        $has_kategoria_id = true;
+                        $kategoria_column = $column['Field']; // Store actual column name
+                    }
                     if ($field === 'sasia') $has_sasia = true;
                     if ($field === 'data_krijimit') $has_data_krijimit = true;
                 }
@@ -90,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $params = [$emri, $pershkrimi, $cmimi, $foto];
             
             if ($has_kategoria_id) {
-                $sql_fields .= ", kategoria_id";
+                $sql_fields .= ", {$kategoria_column}"; // Use actual column name
                 $sql_values .= ", ?";
                 $params[] = $kategoria_id;
             }
@@ -169,7 +174,8 @@ try {
     if ($columns_result) {
         while ($column = $columns_result->fetch_assoc()) {
             $field = strtolower($column['Field']);
-            if (in_array($field, ['id', 'kategoria_id', 'kategori_id'])) {
+            // Check for ID columns (including Id_kategoria)
+            if (in_array($field, ['id', 'kategoria_id', 'kategori_id', 'id_kategoria'])) {
                 $has_id = true;
                 $id_column = $column['Field'];
             }

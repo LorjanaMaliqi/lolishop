@@ -1,6 +1,14 @@
 <?php
 session_start();
-require_once 'config/database.php';
+require_once 'config/dat// Get related products from same category
+$related_sql = "SELECT p.*, k.emri as kategoria_emri 
+                FROM produktet p 
+                LEFT JOIN kategorite k ON p.Id_kategoria = k.Id_kategoria 
+                WHERE p.Id_kategoria = ? AND p.id_produkti != ? 
+                ORDER BY RAND() LIMIT 4";
+
+$related_stmt = $conn->prepare($related_sql);
+$related_stmt->bind_param("ii", $produkti['Id_kategoria'], $product_id);';
 require_once 'includes/functions.php';
 
 // Handle add to cart
@@ -31,7 +39,7 @@ if ($product_id <= 0) {
 // Get product details
 $sql = "SELECT p.*, k.emri as kategoria_emri 
         FROM produktet p 
-        LEFT JOIN kategorite k ON p.id_kategoria = k.id_kategoria 
+        LEFT JOIN kategorite k ON p.Id_kategoria = k.Id_kategoria 
         WHERE p.id_produkti = ?";
 
 $stmt = $conn->prepare($sql);
@@ -48,12 +56,12 @@ if (!$produkti) {
 // Get related products from same category
 $related_sql = "SELECT p.*, k.emri as kategoria_emri 
                 FROM produktet p 
-                LEFT JOIN kategorite k ON p.id_kategoria = k.id_kategoria 
-                WHERE p.id_kategoria = ? AND p.id_produkti != ? 
+                LEFT JOIN kategorite k ON p.ld_kategoria = k.Id_kategoria 
+                WHERE p.ld_kategoria = ? AND p.id_produkti != ? 
                 ORDER BY RAND() LIMIT 4";
 
 $related_stmt = $conn->prepare($related_sql);
-$related_stmt->bind_param("ii", $produkti['id_kategoria'], $product_id);
+$related_stmt->bind_param("ii", $produkti['ld_kategoria'], $product_id);
 $related_stmt->execute();
 $related_result = $related_stmt->get_result();
 $related_products = [];
